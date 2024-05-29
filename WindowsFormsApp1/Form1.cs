@@ -15,6 +15,8 @@ namespace WindowsFormsApp1
             LoadClients();
         }
 
+
+
         private void LoadClients()
         {
             try
@@ -38,18 +40,26 @@ namespace WindowsFormsApp1
         {
             try
             {
-                using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+                if (txtNom.Text == "" || txtPrenom.Text == "" || txtNumero.Text == "")
                 {
-                    sqlConnection.Open();
-                    using (SqlCommand command = new SqlCommand("INSERT INTO Clients (Nom, Prenom, Numero) VALUES (@Nom, @Prenom, @Numero)", sqlConnection))
+                    MessageBox.Show("Remplire les champs.");
+                }
+                else
+                {
+                    using (SqlConnection sqlConnection = new SqlConnection(connectionString))
                     {
-                        command.Parameters.AddWithValue("@Nom", txtNom.Text);
-                        command.Parameters.AddWithValue("@Prenom", txtPrenom.Text);
-                        command.Parameters.AddWithValue("@Numero", txtNumero.Text);
-                        command.ExecuteNonQuery();
-                        LoadClients();
+                        sqlConnection.Open();
+                        using (SqlCommand command = new SqlCommand("INSERT INTO Clients (Nom, Prenom, Numero) VALUES (@Nom, @Prenom, @Numero)", sqlConnection))
+                        {
+                            command.Parameters.AddWithValue("@Nom", txtNom.Text);
+                            command.Parameters.AddWithValue("@Prenom", txtPrenom.Text);
+                            command.Parameters.AddWithValue("@Numero", txtNumero.Text);
+                            command.ExecuteNonQuery();
+                            LoadClients();
+                        }
                     }
                 }
+
             }
             catch (Exception ex)
             {
@@ -64,17 +74,24 @@ namespace WindowsFormsApp1
                 int clientId = Convert.ToInt32(GetCellValue(dataGridViewClients.SelectedRows[0].Cells["Id"]));
                 try
                 {
-                    using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+                    if (txtNom.Text == "" || txtPrenom.Text == "" || txtNumero.Text == "")
                     {
-                        sqlConnection.Open();
-                        using (SqlCommand command = new SqlCommand("UPDATE Clients SET Nom = @Nom, Prenom = @Prenom, Numero = @Numero WHERE Id = @Id", sqlConnection))
+                        MessageBox.Show("Remplire les champs.");
+                    }
+                    else
+                    {
+                        using (SqlConnection sqlConnection = new SqlConnection(connectionString))
                         {
-                            command.Parameters.AddWithValue("@Nom", txtNom.Text);
-                            command.Parameters.AddWithValue("@Prenom", txtPrenom.Text);
-                            command.Parameters.AddWithValue("@Numero", txtNumero.Text);
-                            command.Parameters.AddWithValue("@Id", clientId);
-                            command.ExecuteNonQuery();
-                            LoadClients();
+                            sqlConnection.Open();
+                            using (SqlCommand command = new SqlCommand("UPDATE Clients SET Nom = @Nom, Prenom = @Prenom, Numero = @Numero WHERE Id = @Id", sqlConnection))
+                            {
+                                command.Parameters.AddWithValue("@Nom", txtNom.Text);
+                                command.Parameters.AddWithValue("@Prenom", txtPrenom.Text);
+                                command.Parameters.AddWithValue("@Numero", txtNumero.Text);
+                                command.Parameters.AddWithValue("@Id", clientId);
+                                command.ExecuteNonQuery();
+                                LoadClients();
+                            }
                         }
                     }
                 }
