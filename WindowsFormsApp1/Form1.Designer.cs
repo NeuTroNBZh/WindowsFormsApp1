@@ -27,28 +27,29 @@
             // 
             // txtNom
             // 
-            this.txtNom.Location = new System.Drawing.Point(100, 10);
+            this.txtNom.Location = new System.Drawing.Point(81, 12);
             this.txtNom.Name = "txtNom";
             this.txtNom.Size = new System.Drawing.Size(100, 20);
             this.txtNom.TabIndex = 0;
             // 
             // txtPrenom
             // 
-            this.txtPrenom.Location = new System.Drawing.Point(100, 40);
+            this.txtPrenom.Location = new System.Drawing.Point(81, 40);
             this.txtPrenom.Name = "txtPrenom";
             this.txtPrenom.Size = new System.Drawing.Size(100, 20);
             this.txtPrenom.TabIndex = 1;
+            this.txtPrenom.TextChanged += new System.EventHandler(this.txtPrenom_TextChanged);
             // 
             // txtNumero
             // 
-            this.txtNumero.Location = new System.Drawing.Point(100, 70);
+            this.txtNumero.Location = new System.Drawing.Point(81, 66);
             this.txtNumero.Name = "txtNumero";
             this.txtNumero.Size = new System.Drawing.Size(100, 20);
             this.txtNumero.TabIndex = 2;
             // 
             // btnAjouter
             // 
-            this.btnAjouter.Location = new System.Drawing.Point(10, 100);
+            this.btnAjouter.Location = new System.Drawing.Point(15, 100);
             this.btnAjouter.Name = "btnAjouter";
             this.btnAjouter.Size = new System.Drawing.Size(75, 23);
             this.btnAjouter.TabIndex = 3;
@@ -58,7 +59,7 @@
             // 
             // btnModifier
             // 
-            this.btnModifier.Location = new System.Drawing.Point(90, 100);
+            this.btnModifier.Location = new System.Drawing.Point(96, 100);
             this.btnModifier.Name = "btnModifier";
             this.btnModifier.Size = new System.Drawing.Size(75, 23);
             this.btnModifier.TabIndex = 4;
@@ -68,7 +69,7 @@
             // 
             // btnSupprimer
             // 
-            this.btnSupprimer.Location = new System.Drawing.Point(170, 100);
+            this.btnSupprimer.Location = new System.Drawing.Point(177, 100);
             this.btnSupprimer.Name = "btnSupprimer";
             this.btnSupprimer.Size = new System.Drawing.Size(75, 23);
             this.btnSupprimer.TabIndex = 5;
@@ -81,12 +82,12 @@
             this.dataGridViewClients.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewClients.Location = new System.Drawing.Point(10, 140);
             this.dataGridViewClients.Name = "dataGridViewClients";
-            this.dataGridViewClients.Size = new System.Drawing.Size(240, 150);
+            this.dataGridViewClients.Size = new System.Drawing.Size(240, 238);
             this.dataGridViewClients.TabIndex = 6;
             // 
             // Form1
             // 
-            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.ClientSize = new System.Drawing.Size(264, 390);
             this.Controls.Add(this.dataGridViewClients);
             this.Controls.Add(this.btnSupprimer);
             this.Controls.Add(this.btnModifier);
@@ -99,6 +100,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewClients)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         private System.Windows.Forms.TextBox txtNom;

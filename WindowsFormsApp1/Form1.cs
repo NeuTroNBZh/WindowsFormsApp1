@@ -15,8 +15,6 @@ namespace WindowsFormsApp1
             LoadClients();
         }
 
-
-
         private void LoadClients()
         {
             try
@@ -36,30 +34,100 @@ namespace WindowsFormsApp1
             }
         }
 
+        private void InsertClient()
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string procedureName = "spInsertClient";
+
+                using (SqlCommand command = new SqlCommand(procedureName, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.AddWithValue("@Nom", txtNom.Text);
+                    command.Parameters.AddWithValue("@Prenom", txtPrenom.Text);
+                    command.Parameters.AddWithValue("@Numero", txtNumero.Text);
+
+                    try
+                    {
+                        connection.Open();
+                        int rowsAffected = command.ExecuteNonQuery();
+                        // MessageBox.Show($"{rowsAffected} lignes affectées.");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Une erreur s'est produite : {ex.Message}");
+                    }
+                }
+            }
+        }
+
+        private void ModifClient(int clientId)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string procedureName = "spModifyClient";
+
+                using (SqlCommand command = new SqlCommand(procedureName, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.AddWithValue("@Id", clientId);
+                    command.Parameters.AddWithValue("@Nom", txtNom.Text);
+                    command.Parameters.AddWithValue("@Prenom", txtPrenom.Text);
+                    command.Parameters.AddWithValue("@Numero", txtNumero.Text);
+
+                    try
+                    {
+                        connection.Open();
+                        int rowsAffected = command.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Une erreur s'est produite : {ex.Message}");
+                    }
+                }
+            }
+        }
+
+        private void SuprClient(int clientId)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string procedureName = "spDeleteClient";
+
+                using (SqlCommand command = new SqlCommand(procedureName, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.AddWithValue("@Id", clientId);
+
+                    try
+                    {
+                        connection.Open();
+                        int rowsAffected = command.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Une erreur s'est produite : {ex.Message}");
+                    }
+                }
+            }
+        }
+
         private void btnAjouter_Click(object sender, EventArgs e)
         {
             try
             {
-                if (txtNom.Text == "" || txtPrenom.Text == "" || txtNumero.Text == "")
+                if (string.IsNullOrWhiteSpace(txtNom.Text) || string.IsNullOrWhiteSpace(txtPrenom.Text) || string.IsNullOrWhiteSpace(txtNumero.Text))
                 {
-                    MessageBox.Show("Remplire les champs.");
+                    MessageBox.Show("Remplissez tous les champs.");
                 }
                 else
                 {
-                    using (SqlConnection sqlConnection = new SqlConnection(connectionString))
-                    {
-                        sqlConnection.Open();
-                        using (SqlCommand command = new SqlCommand("INSERT INTO Clients (Nom, Prenom, Numero) VALUES (@Nom, @Prenom, @Numero)", sqlConnection))
-                        {
-                            command.Parameters.AddWithValue("@Nom", txtNom.Text);
-                            command.Parameters.AddWithValue("@Prenom", txtPrenom.Text);
-                            command.Parameters.AddWithValue("@Numero", txtNumero.Text);
-                            command.ExecuteNonQuery();
-                            LoadClients();
-                        }
-                    }
+                    InsertClient();
+                    LoadClients();
                 }
-
             }
             catch (Exception ex)
             {
@@ -74,25 +142,14 @@ namespace WindowsFormsApp1
                 int clientId = Convert.ToInt32(GetCellValue(dataGridViewClients.SelectedRows[0].Cells["Id"]));
                 try
                 {
-                    if (txtNom.Text == "" || txtPrenom.Text == "" || txtNumero.Text == "")
+                    if (string.IsNullOrWhiteSpace(txtNom.Text) || string.IsNullOrWhiteSpace(txtPrenom.Text) || string.IsNullOrWhiteSpace(txtNumero.Text))
                     {
-                        MessageBox.Show("Remplire les champs.");
+                        MessageBox.Show("Remplissez tous les champs.");
                     }
                     else
                     {
-                        using (SqlConnection sqlConnection = new SqlConnection(connectionString))
-                        {
-                            sqlConnection.Open();
-                            using (SqlCommand command = new SqlCommand("UPDATE Clients SET Nom = @Nom, Prenom = @Prenom, Numero = @Numero WHERE Id = @Id", sqlConnection))
-                            {
-                                command.Parameters.AddWithValue("@Nom", txtNom.Text);
-                                command.Parameters.AddWithValue("@Prenom", txtPrenom.Text);
-                                command.Parameters.AddWithValue("@Numero", txtNumero.Text);
-                                command.Parameters.AddWithValue("@Id", clientId);
-                                command.ExecuteNonQuery();
-                                LoadClients();
-                            }
-                        }
+                        ModifClient(clientId);
+                        LoadClients();
                     }
                 }
                 catch (Exception ex)
@@ -118,8 +175,7 @@ namespace WindowsFormsApp1
                         sqlConnection.Open();
                         using (SqlCommand command = new SqlCommand("DELETE FROM Clients WHERE Id = @Id", sqlConnection))
                         {
-                            command.Parameters.AddWithValue("@Id", clientId);
-                            command.ExecuteNonQuery();
+                            SuprClient(clientId);
                             LoadClients();
                         }
                     }
@@ -138,6 +194,11 @@ namespace WindowsFormsApp1
         private object GetCellValue(DataGridViewCell cell)
         {
             return cell.Value == DBNull.Value ? null : cell.Value;
+        }
+
+        private void txtPrenom_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
